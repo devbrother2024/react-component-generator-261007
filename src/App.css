@@ -213,6 +213,35 @@
   line-height: 1.7;
 }
 
+.prompt-textarea[aria-invalid='true'] {
+  border-color: var(--tomato);
+}
+
+.prompt-meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: -6px;
+  font-size: 0.85rem;
+}
+
+.prompt-error {
+  color: var(--tomato);
+  font-weight: 700;
+}
+
+.prompt-counter {
+  margin-left: auto;
+  color: #85857f;
+  font-variant-numeric: tabular-nums;
+}
+
+.prompt-counter-over {
+  color: var(--tomato);
+  font-weight: 700;
+}
+
 .prompt-textarea::placeholder,
 .api-key-field input::placeholder {
   color: #85857f;

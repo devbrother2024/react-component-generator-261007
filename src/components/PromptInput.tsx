@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { MAX_PROMPT_LENGTH, validatePrompt } from '../utils/validatePrompt';
 
 interface PromptInputProps {
   onGenerate: (prompt: string) => void;
@@ -16,10 +17,11 @@ const EXAMPLES = [
 
 export function PromptInput({ onGenerate, isLoading }: PromptInputProps) {
   const [prompt, setPrompt] = useState('');
+  const validation = validatePrompt(prompt);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (prompt.trim() && !isLoading) {
+    if (prompt.trim() && validation.valid && !isLoading) {
       onGenerate(prompt.trim());
     }
   };
@@ -45,11 +47,24 @@ export function PromptInput({ onGenerate, isLoading }: PromptInputProps) {
               handleSubmit(e);
             }
           }}
+          aria-invalid={!validation.valid}
         />
+        <div className="prompt-meta">
+          {validation.error && (
+            <p className="prompt-error" role="alert">
+              {validation.error}
+            </p>
+          )}
+          <span
+            className={`prompt-counter${validation.valid ? '' : ' prompt-counter-over'}`}
+          >
+            {validation.length} / {MAX_PROMPT_LENGTH}
+          </span>
+        </div>
         <button
           type="submit"
           className="btn-generate"
-          disabled={!prompt.trim() || isLoading}
+          disabled={!prompt.trim() || !validation.valid || isLoading}
         >
           {isLoading ? (
             <span className="loading-spinner">생성 중...</span>
