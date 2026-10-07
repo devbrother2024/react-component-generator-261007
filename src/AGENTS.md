@@ -28,4 +28,5 @@ Vite + React 19 브라우저 앱. 서버와는 `/api/generate`, `/api/config` HT
 - Hard Constraint: `LivePreview`는 `<LiveProvider code={code} noInline>`을 쓴다 (`src/components/LivePreview.tsx:14`). `noInline`을 제거하면 서버가 생성하는 `render(<X />)` 형식 코드가 동작하지 않는다.
 - Do: 서버 에러 응답은 `data.error`를 사용자 메시지로 표시한다 (`src/hooks/useComponentGenerator.ts:31-33`). 서버 에러 문구는 한국어 사용자 노출용이므로 가공하지 않는다.
 - Do: `apiKey`는 값이 있을 때만 요청 본문에 포함한다 (`src/hooks/useComponentGenerator.ts:26`). 빈 문자열을 보내면 서버가 환경변수 키로 폴백하지 못할 수 있다 (`server/index.ts:65`는 `||` 이므로 안전하지만 의도를 유지한다).
-- Don't: API 키를 `localStorage` 등에 저장하거나 로그로 남기지 마라. 현재 키는 요청 본문으로만 전달된다.
+- Do: API 키는 사용자 요청에 따라 `localStorage`(`rcg:apiKeys`, Provider별)에 평문으로 저장한다 (`src/App.tsx`, `src/utils/storage.ts`). 저장 키 이름은 `STORAGE_KEYS`에서만 정의한다.
+- Don't: API 키를 로그로 남기거나 `localStorage` 외의 곳(쿠키, URL 등)에 저장하지 마라. 서버로는 요청 본문으로만 전달된다.
